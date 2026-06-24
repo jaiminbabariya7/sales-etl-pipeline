@@ -1,0 +1,12 @@
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# Client data — not for version control
+raw_sales_data.csv
+output/clean_sales_data.csv
+output/monthly_summary.csv
+output/analytics.db
+output/pipeline_run.log
