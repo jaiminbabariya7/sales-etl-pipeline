@@ -2,7 +2,8 @@
 
 **Scenario:** B2B enterprise IT hardware & software distributor (synthetic sample data; no real client data)  
 **Scope:** Automated ETL pipeline — raw multi-currency sales exports → clean analytical database  
-**Engineer:** Jaimin Babariya (Data Engineer)
+**Engineer:** Jaimin Babariya (Data Engineer)  
+**Note:** Built as a freelance-style practice deliverable; all data is synthetic.
 
 ---
 
@@ -35,6 +36,8 @@ This pipeline automates the full Extract → Transform → Load cycle and produc
 
 ## Output
 
+Created in `output/` each time the pipeline runs (not committed to the repo).
+
 | File | Description |
 |---|---|
 | `output/analytics.db` | SQLite database with 5 tables (fact_sales, dim_monthly, dim_product, dim_region, dim_sales_rep) |
@@ -45,6 +48,8 @@ This pipeline automates the full Extract → Transform → Load cycle and produc
 ---
 
 ## Pipeline Results
+
+From a sample run on the synthetic dataset (see the terminal-log screenshot):
 
 ```
 Loaded:    2,000 raw rows
@@ -60,11 +65,11 @@ Total Revenue (USD): $50,023,325
 ## Project Structure
 
 ```
-etl_pipeline_project/
+sales-etl-pipeline/
 ├── etl_pipeline.py         # Main ETL script (Extract → Transform → Aggregate → Load)
-├── raw_sales_data.csv      # Source data export
+├── raw_sales_data.csv      # Input file you supply (not included in the repo)
 ├── requirements.txt
-├── output/
+├── output/                 # Created when the pipeline runs
 │   ├── analytics.db        # Analytics-ready SQLite database
 │   ├── clean_sales_data.csv
 │   ├── monthly_summary.csv
@@ -85,4 +90,4 @@ pip install -r requirements.txt
 python etl_pipeline.py
 ```
 
-Expects `raw_sales_data.csv` in the project root. Output is written to `output/`.
+Place a sales export named `raw_sales_data.csv` in the project root (the synthetic dataset itself is not included in this repo). The pipeline creates `output/` and writes the database, CSVs and run log there.
