@@ -4,7 +4,7 @@ __pycache__/
 *.pyo
 .env
 
-# Client data — not for version control
+# Generated data and outputs (python generate_sample_data.py && python etl_pipeline.py)
 raw_sales_data.csv
 output/clean_sales_data.csv
 output/monthly_summary.csv

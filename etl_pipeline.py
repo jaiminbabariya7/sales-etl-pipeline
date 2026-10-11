@@ -23,7 +23,8 @@ def extract(path):
     if not os.path.exists(path):
         raise FileNotFoundError(f"Source file not found: {path}")
     df = pd.read_csv(path)
-    required_cols = {"order_id", "order_date", "product_name", "quantity", "unit_price", "currency"}
+    required_cols = {"order_id", "order_date", "product_name", "quantity", "unit_price",
+                     "currency", "region", "sales_rep"}
     missing = required_cols - set(df.columns)
     if missing:
         raise ValueError(f"Source file missing required columns: {missing}")
@@ -34,6 +35,19 @@ def extract(path):
     return df
 
 # ─── TRANSFORM ────────────────────────────────────────────────────────────────
+DATE_FORMATS = ("%m/%d/%Y", "%Y-%m-%d", "%d-%b-%Y")
+
+
+def parse_date(value: str):
+    """Return the date as YYYY-MM-DD, or None if no known format matches."""
+    for fmt in DATE_FORMATS:
+        try:
+            return datetime.strptime(value.strip(), fmt).strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+    return None
+
+
 def transform(df):
     log("TRANSFORM ▶ Cleaning and standardizing data...")
     raw_count = len(df)
@@ -44,13 +58,14 @@ def transform(df):
 
     # 2. Drop rows with missing critical fields
     before = len(df)
-    df = df[df["order_date"].notna() & (df["order_date"] != "")]
+    df = df[df["order_date"].notna() & (df["order_date"].astype(str).str.strip() != "")]
     log(f"  ✓ Dropped {before - len(df)} rows with missing dates")
 
-    # 3. Parse order_date to standard format
-    df["order_date"] = pd.to_datetime(df["order_date"], format="%m/%d/%Y", errors="coerce")
+    # 3. Parse mixed date formats (MM/DD/YYYY, YYYY-MM-DD, DD-Mon-YYYY) to YYYY-MM-DD
+    df["order_date"] = df["order_date"].astype(str).map(parse_date)
+    before = len(df)
     df = df.dropna(subset=["order_date"])
-    df["order_date"] = df["order_date"].dt.strftime("%Y-%m-%d")
+    log(f"  ✓ Standardized dates to YYYY-MM-DD ({before - len(df)} unparseable rows dropped)")
     df["order_month"] = pd.to_datetime(df["order_date"]).dt.to_period("M").astype(str)
 
     # 4. Fix unit_price (remove $ signs, cast to float)
