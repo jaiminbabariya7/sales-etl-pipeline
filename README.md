@@ -1,6 +1,6 @@
 # Sales Data ETL Pipeline
 
-**Client:** Confidential (B2B enterprise IT hardware & software distributor)  
+**Scenario:** B2B enterprise IT hardware & software distributor (synthetic sample data; no real client data)  
 **Scope:** Automated ETL pipeline — raw multi-currency sales exports → clean analytical database  
 **Engineer:** Jaimin Babariya (Data Engineer)
 
@@ -8,7 +8,7 @@
 
 ## Business Problem
 
-The client distributes enterprise IT products (network hardware, ERP/CRM licenses, server infrastructure) across five global regions. Their sales team exported orders from three regional CRM systems (USD, EUR, GBP) with inconsistent formatting — mixed date formats, duplicate order IDs from system retries, and negative quantities from cancelled lines not being voided correctly. Finance needed a single clean dataset for monthly reporting without manual Excel cleanup.
+The scenario models a distributor of enterprise IT products (network hardware, ERP/CRM licenses, server infrastructure) across five global regions. Its sales team exported orders from three regional CRM systems (USD, EUR, GBP) with inconsistent formatting — mixed date formats, duplicate order IDs from system retries, and negative quantities from cancelled lines not being voided correctly. Finance needed a single clean dataset for monthly reporting without manual Excel cleanup.
 
 This pipeline automates the full Extract → Transform → Load cycle and produces a normalized analytics database ready for BI tooling.
 
